@@ -1,5 +1,5 @@
-import { Toaster } from "react-hot-toast";
-import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { useEffect, useState } from "react";
 import css from "./App.module.css";
 import SearchBar from "../SearchBar/SearchBar";
 import type { Movie } from "../types/movie";
@@ -16,6 +16,8 @@ export default function App() {
   const [page, setPage] = useState<number>(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
+  // const noMoviesNotify = () => toast("No movies found for your request.");
+
   const { data, error, isLoading } = useQuery({
     queryKey: ["movies", topic, page],
     queryFn: () => fetchMovies(topic, page),
@@ -24,10 +26,19 @@ export default function App() {
     staleTime: 60 * 1000,
   });
 
+  const showNoMovies =
+    topic.trim() !== "" && !isLoading && !error && data?.results?.length === 0;
+
+  useEffect(() => {
+    if (showNoMovies) {
+      toast("No movies found for your request", { id: "no-movies" });
+    }
+  }, [showNoMovies]);
+
   const handleSearch = (topic: string) => {
     if (topic.trim() !== "") {
       setTopic(topic);
-      setPage(0);
+      setPage(1);
     }
   };
 
@@ -45,7 +56,7 @@ export default function App() {
       <SearchBar onSubmit={handleSearch} />
       {isLoading ? <Loader /> : null}
       {error ? <ErrorMessage errorMessage={error.message} /> : null}
-      {data ? (
+      {data?.results?.length ? (
         <>
           <MovieGrid movies={data.results} onSelect={handleModal} />
           <ReactPaginate

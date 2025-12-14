@@ -7,7 +7,7 @@ interface ErrorMessageProps {
 export default function ErrorMessage({ errorMessage }: ErrorMessageProps) {
   return (
     <p className={css.text}>
-      There was an error, {errorMessage}. Please try again...
+      There was an error: {errorMessage}. <br /> Please try again...
     </p>
   );
 }
