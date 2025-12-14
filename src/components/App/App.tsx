@@ -28,7 +28,11 @@ export default function App() {
   });
 
   const showNoMovies =
-    topic.trim() !== "" && !isLoading && !error && data?.results?.length === 0;
+    topic.trim() !== "" &&
+    !isLoading &&
+    !error &&
+    !isFetching &&
+    data?.results?.length === 0;
 
   useEffect(() => {
     if (searchId > 0 && showNoMovies) {
@@ -60,7 +64,6 @@ export default function App() {
       {error ? <ErrorMessage errorMessage={error.message} /> : null}
       {data?.results?.length ? (
         <>
-          <MovieGrid movies={data.results} onSelect={handleModal} />
           <div className={isFetching ? css.paginateDisabled : ""}>
             <ReactPaginate
               pageCount={data.total_pages}
@@ -73,6 +76,7 @@ export default function App() {
               containerClassName={css.pagination}
               activeClassName={css.active}
             />
+            <MovieGrid movies={data.results} onSelect={handleModal} />
           </div>
         </>
       ) : null}
