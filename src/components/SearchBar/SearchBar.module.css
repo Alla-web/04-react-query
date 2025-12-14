@@ -55,3 +55,8 @@
 .button:hover {
   background-color: #004182;
 }
+
+.buttonDisabled {
+  pointer-events: none;
+  opacity: 0.5;
+}

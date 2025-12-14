@@ -18,7 +18,7 @@ export default function App() {
 
   // const noMoviesNotify = () => toast("No movies found for your request.");
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading, isFetching } = useQuery({
     queryKey: ["movies", topic, page],
     queryFn: () => fetchMovies(topic, page),
     enabled: topic !== "",
@@ -53,23 +53,25 @@ export default function App() {
 
   return (
     <div className={css.app}>
-      <SearchBar onSubmit={handleSearch} />
+      <SearchBar onSubmit={handleSearch} disabled={isFetching} />
       {isLoading ? <Loader /> : null}
       {error ? <ErrorMessage errorMessage={error.message} /> : null}
       {data?.results?.length ? (
         <>
           <MovieGrid movies={data.results} onSelect={handleModal} />
-          <ReactPaginate
-            pageCount={data.total_pages}
-            pageRangeDisplayed={5}
-            marginPagesDisplayed={1}
-            onPageChange={({ selected }) => setPage(selected + 1)}
-            forcePage={page - 1}
-            nextLabel="→"
-            previousLabel="←"
-            containerClassName={css.pagination}
-            activeClassName={css.active}
-          />
+          <div className={isFetching ? css.paginateDisabled : ""}>
+            <ReactPaginate
+              pageCount={data.total_pages}
+              pageRangeDisplayed={5}
+              marginPagesDisplayed={1}
+              onPageChange={({ selected }) => setPage(selected + 1)}
+              forcePage={page - 1}
+              nextLabel="→"
+              previousLabel="←"
+              containerClassName={css.pagination}
+              activeClassName={css.active}
+            />
+          </div>
         </>
       ) : null}
       {selectedMovie ? (

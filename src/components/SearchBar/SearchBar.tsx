@@ -1,13 +1,17 @@
 import styles from "./SearchBar.module.css";
 import toast from "react-hot-toast";
+import clsx from "clsx";
 
 interface SearchBarProps {
   onSubmit: (query: string) => void;
+  disabled?: boolean;
 }
 
-export default function SearchBar({ onSubmit }: SearchBarProps) {
+export default function SearchBar({ onSubmit, disabled }: SearchBarProps) {
   const handleSearch = (formData: FormData) => {
     const query = formData.get("query") as string;
+
+    if (disabled) return;
 
     if (query.trim() !== "") {
       onSubmit(query);
@@ -16,7 +20,7 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
     }
   };
 
-  const notify = () => toast("Please enter your search query.");
+  const notify = () => toast("Please enter your search query");
 
   return (
     <header className={styles.header}>
@@ -38,7 +42,10 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
             placeholder="Search movies..."
             autoFocus
           />
-          <button className={styles.button} type="submit">
+          <button
+            className={clsx(styles.button, disabled && styles.buttonDisabled)}
+            type="submit"
+          >
             Search
           </button>
         </form>

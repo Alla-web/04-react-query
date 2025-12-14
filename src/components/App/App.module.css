@@ -28,3 +28,10 @@
   color: white;
   font-weight: bold;
 }
+
+/* дізейбл пагінації */
+
+.paginateDisabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
