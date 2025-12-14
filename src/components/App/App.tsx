@@ -1,5 +1,5 @@
 import toast, { Toaster } from "react-hot-toast";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import css from "./App.module.css";
 import SearchBar from "../SearchBar/SearchBar";
 import type { Movie } from "../types/movie";
