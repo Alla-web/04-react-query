@@ -1,5 +1,5 @@
 import toast, { Toaster } from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import css from "./App.module.css";
 import SearchBar from "../SearchBar/SearchBar";
 import type { Movie } from "../types/movie";
@@ -15,6 +15,7 @@ export default function App() {
   const [topic, setTopic] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [searchId, setSearchId] = useState(0);
 
   // const noMoviesNotify = () => toast("No movies found for your request.");
 
@@ -30,15 +31,16 @@ export default function App() {
     topic.trim() !== "" && !isLoading && !error && data?.results?.length === 0;
 
   useEffect(() => {
-    if (showNoMovies) {
-      toast("No movies found for your request", { id: "no-movies" });
+    if (searchId > 0 && showNoMovies) {
+      toast("No movies found for your request");
     }
-  }, [showNoMovies]);
+  }, [showNoMovies, searchId]);
 
   const handleSearch = (topic: string) => {
     if (topic.trim() !== "") {
       setTopic(topic);
       setPage(1);
+      setSearchId(searchId + 1);
     }
   };
 
