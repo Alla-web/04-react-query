@@ -1,4 +1,4 @@
-import type { Movie } from "../types/movie";
+import type { Movie } from "../../types/movie";
 import css from "./MovieGrid.module.css";
 import PlaceholderPoster from "../../assets/placeholer-poster.png";
 
